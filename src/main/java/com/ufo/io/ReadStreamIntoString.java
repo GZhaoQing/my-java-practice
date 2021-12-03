@@ -22,20 +22,35 @@ public class ReadStreamIntoString {
 
     public String readFile(String filePath) throws FileNotFoundException {
         String bytesInStr = new String();
-        BASE64Decoder decoder = new BASE64Decoder();
         try(BufferedInputStream b_in = new BufferedInputStream(new FileInputStream(filePath))){//默认8k缓冲
-            bytesInStr = readByOneByte(b_in);
+            bytesInStr = readInByteStr(b_in);
             System.out.println(bytesInStr);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        String str=null;
-        String fileNameOut = fileNameOut(filePath);
-        return str;
+        return bytesInStr;
     }
 
-    public String readByOneByte(InputStream in) throws IOException{
+    public byte[] readInByteArr(InputStream in) throws IOException{
+        int bytesRead = 0;
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        while ((bytesRead = in.read(buffer)) != -1) {
+            byteStream.write(buffer,0,bytesRead);
+        }
+        return byteStream.toByteArray();
+    }
+
+    public byte[] readInByteArrNoBuffer(InputStream in) throws IOException{
+        int bytesRead = 0;
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        while ((bytesRead = in.read()) != -1) {
+            byteStream.write(bytesRead);
+        }
+        return byteStream.toByteArray();
+    }
+
+    public String readInByteStr(InputStream in) throws IOException{
         int bytesRead = 0;
         StringBuffer buf = new StringBuffer();
         while ((bytesRead = in.read()) != -1) {
