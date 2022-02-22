@@ -2,6 +2,7 @@ package com.ufo.time;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class checkTimeDelay {
 
@@ -13,6 +14,8 @@ public class checkTimeDelay {
         Duration du = Duration.ofDays(270);
         System.out.println(checkToTargetInDu(checkPoint,tarPoint,du));
         System.out.println(Duration.between(checkPoint,tarPoint));
+
+        System.out.println(checkTimeInterval(checkPoint,tarPoint));
     }
 
     private static boolean checkToTargetInDu(LocalDateTime checkPoint,LocalDateTime tarPoint,Duration du){
@@ -22,5 +25,9 @@ public class checkTimeDelay {
             inDu=true;
         }
         return inDu;
+    }
+
+    private static boolean checkTimeInterval(LocalDateTime d1,LocalDateTime d2){
+        return ChronoUnit.MINUTES.between(d1,d2) > 1; //大于一分钟
     }
 }
