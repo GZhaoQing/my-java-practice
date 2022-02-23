@@ -33,27 +33,35 @@ public class ReadStreamIntoString {
 
     public byte[] readInByteArr(InputStream in) throws IOException{
         int bytesRead = 0;
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        while ((bytesRead = in.read(buffer)) != -1) {
-            byteStream.write(buffer,0,bytesRead);
+        try(ByteArrayOutputStream byteStream = new ByteArrayOutputStream();){
+            byte[] buffer = new byte[4096];
+            while ((bytesRead = in.read(buffer)) != -1) {
+                byteStream.write(buffer,0,bytesRead);
+            }
+            return byteStream.toByteArray();
+        }catch (IOException e) {
+            e.printStackTrace();
         }
-        return byteStream.toByteArray();
+        return null;
     }
 
-    public byte[] readInByteArrNoBuffer(InputStream in) throws IOException{
+    public byte[] readInByteArrNoBuffer(InputStream in){
         int bytesRead = 0;
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        while ((bytesRead = in.read()) != -1) {
-            byteStream.write(bytesRead);
+        try(ByteArrayOutputStream byteStream = new ByteArrayOutputStream()){
+            while ((bytesRead = in.read()) != -1) {
+                byteStream.write(bytesRead);
+            }
+            return byteStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return byteStream.toByteArray();
+        return null;
     }
 
     public String readInByteStr(InputStream in) throws IOException{
         int bytesRead = 0;
         StringBuffer buf = new StringBuffer();
-        while ((bytesRead = in.read()) != -1) {
+        while ((bytesRead = in.read()) != -1) {// close stream outside
             buf.append(Integer.toBinaryString(bytesRead));
         }
         return buf.toString();
